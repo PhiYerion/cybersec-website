@@ -22,18 +22,18 @@ fn Header() -> impl IntoView {
     const header_len: usize = HEADER.len();
 
 
-    let (hacktext, set_hacktext) = create_signal(String::new());
-    let (index, set_index) = create_signal(0usize);
-    let (hacktext_finished, set_hacktext_finished) = create_signal(false);
+    let (text, set_text)                    = create_signal(String::new());
+    let (index, set_index)                  = create_signal(0usize);
+    let (text_finished, set_text_finished)  = create_signal(false);
 
     let duration: u64 = 275;
     let time_to_run: u64 = (header_len as u64 * duration).try_into().unwrap();
 
     let typer = set_interval_with_handle (move || {
 
-        if index.get() >= header_len { return };
+        if index() >= header_len { return };
         
-        set_hacktext.update(|text| 
+        set_text.update(|text| 
             (*text).push(
                 HEADER.chars().nth(index()).unwrap()
         ));
@@ -43,7 +43,7 @@ fn Header() -> impl IntoView {
 
     set_timeout(move || {
         typer.unwrap().clear();
-        set_hacktext_finished.update(|x| *x = true);
+        set_text_finished.update(|x| *x = true);
     }, Duration::from_millis(time_to_run));
 
     let cursor = create_cursor();
@@ -54,9 +54,9 @@ fn Header() -> impl IntoView {
           // padding for when text is being made, but reserve cool effect
           // when text is drawn.
           <span class="invisible">
-            {move || if (hacktext_finished.get()) {""} else {cursor.get()}}
+            {move || if text_finished() {""} else {cursor()}}
           </span>
-          {hacktext}{cursor}
+          {text}{cursor}
         </h1>
       </nav>
     }
