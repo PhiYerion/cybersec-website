@@ -67,11 +67,18 @@ fn Header() -> impl IntoView {
 }
 
 fn Body() -> impl IntoView {
-}
+    view! {
+      <body style="background-color: #111">
+
+      </body>
+    }
+
 
 #[component]
 fn App() -> impl IntoView {
-    (Header(), Body())
+    <Body>
+      <Header/>
+    <Body>
 }
 
 fn main() {
