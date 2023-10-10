@@ -27,7 +27,7 @@ fn Header() -> impl IntoView {
     let (text_finished, set_text_finished)  = create_signal(false);
 
     let duration: u64 = 275;
-    let time_to_run: u64 = (header_len as u64 * duration).try_into().unwrap();
+    let time_to_run: u64 = (header_len as u64 * (duration + 1) ).try_into().unwrap();
 
     let typer = set_interval_with_handle (move || {
 
