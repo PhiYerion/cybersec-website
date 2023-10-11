@@ -1,7 +1,9 @@
 use leptos::{*};
 
+mod section;
 mod typing;
 
+use section::{Section, TypingConfig, TypedSection};
 use typing::TypedText;
 
 
@@ -10,62 +12,42 @@ fn Header() -> impl IntoView {
     view! {
       <nav style="background-color: #222" class="text-4xl flex justify-center items-center w-screen pt-12 pb-6">
         <h1 class="hackerfont text-center text-green-500">
-          <TypedText centered=true interval=275 stop=false text="ETSU CYBERSECURITY CLUB" />
+          <TypedText centered=true interval=275 stop=false text="''Blazor App''" />
         </h1>
       </nav>
     }
 }
 
-struct Section {
-  header: &'static str,
-  text: &'static str,
-  delay: u64,
-}
-
-#[component]
-fn TypedSection(base: Section) -> impl IntoView {
-    let header_interval = 70;
-    let text_interval = 7;
-
-    view! {
-      <div class="px-6">
-        <h2 class="text-lg">
-          <TypedText 
-            text={base.header} 
-            delay={base.delay} 
-            interval={header_interval} 
-            centered=false 
-            stop=true 
-          />
-        </h2>
-        <TypedText 
-          text={base.text} 
-          delay={base.delay + base.header.len() as u64 * header_interval + 20} 
-          interval={text_interval} 
-          centered=false 
-          stop=true 
-        />
-      </div>
-    }
-}
-
 #[component]
 fn Aboutus() -> impl IntoView {
-    let cmd_text = "cat README.md";
-    let cmd_interval = 4;
-    let hero_delay = cmd_text.len() as u64 * cmd_interval;
+    let cmd_text = "msbuild ./CSharpApp.sln";
+    let cmd_interval = 80;
+    let hero_delay = cmd_text.len() as u64 * cmd_interval + 20;
 
-    let sectionOne = Section {
-        header: "test header",
-        text: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-        delay: 89,
+    const hero_typing_cfg: TypingConfig = TypingConfig {
+        header_interval: 70,
+        text_interval: 7,
     };
-    let sectionTwo = Section {
-        header: "test header two",
-        text: "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
-        delay: sectionOne.header.len() as u64 * 70 
-             + sectionOne.text.len() as u64 * 7
-             + sectionOne.delay + 20,
+
+    let view_album = Section {
+        header: "View Album",
+        text:   "",
+        delay:  hero_delay,
+        cfg:    &hero_typing_cfg,
+    };
+    let create_album = Section {
+        header: "Create Album",
+        text:   "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.",
+        delay:  view_album.header.len() as u64 * 70 
+              + view_album.text.len() as u64 * 7
+              + view_album.delay + 20,
+        cfg:    &hero_typing_cfg,
+    };
+    let edit_album = Section {
+        header: "Edit Album",
+        text:   "Edit an existing album, including 1. adding and deleting songs and 2. deleting an album",
+        delay:  create_album.delay + create_album.text.len() as u64,
+        cfg:    &hero_typing_cfg,
     };
 
     view! {
@@ -79,8 +61,8 @@ fn Aboutus() -> impl IntoView {
           </span>
         </p>
         <div class="flex hackerfont text-gray-200 text-base px-8">
-          <TypedSection base=sectionOne/>
-          <TypedSection base=sectionTwo/>
+          <TypedSection base=&view_album/>
+          <TypedSection base=&create_album/>
         </div>
       </div>
     }

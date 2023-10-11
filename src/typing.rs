@@ -17,14 +17,16 @@ fn create_cursor<'a>() -> (ReadSignal<&'a str>, WriteSignal<&'a str>, IntervalHa
 
 #[component]
 pub fn TypedText(
-    text: &'static str, 
-    interval: u64, 
-    #[prop(default = false)]
-    centered: bool, 
-    #[prop(default = false)]
-    stop: bool,
-    #[prop(default = 0)]
-    delay: u64) -> impl IntoView {
+        text: &'static str, 
+        interval: u64, 
+        #[prop(default = false)]
+        centered: bool, 
+        #[prop(default = false)]
+        stop: bool,
+        #[prop(default = 0)]
+        delay: u64
+    ) -> impl IntoView {
+
     let text_len: usize = text.len();
 
     let (text_render, set_text_render)      = create_signal(String::new());
@@ -32,7 +34,7 @@ pub fn TypedText(
     let (text_finished, set_text_finished)  = create_signal(false);
     let (cursor, set_cursor, cursor_handle) = create_cursor();
     
-    let time_to_run: u64 = (text_len as u64 * (interval + 1) ).try_into().unwrap();
+    let time_to_run: u64 = (text_len as u64 * (interval * 3 / 2) ).try_into().unwrap();
     
     set_timeout(move || {
         let typer = set_interval_with_handle (move || {
