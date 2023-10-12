@@ -31,7 +31,7 @@ pub fn View(delay: u64, set_page: WriteSignal<Pages>) -> impl IntoView {
     view! {
       <div class="px-8 text-gray-200">
         <div class="flex hackerfont text-gray-200 text-base items-center self-center px-[20vw] pt-8">
-          <TyperButton on:click=move |_| {set_page(Pages::MainMenu)}>
+          <TyperButton on:click=move |_| {(view_album.set_header)("test".to_string())}>
             <TypedSection base=view_album/>
           </TyperButton>
           <TyperButton on:click=move |_| {set_page(Pages::AddAlbum)}>

@@ -44,6 +44,7 @@ pub fn TypedSection(base: Section) -> impl IntoView {
     let text_interval = 7;
 
     logging::log!("Creating section with {:?}", base);
+    let text_delay = base.delay + (base.header)().len() as u64 * header_interval + 20;
 
     view! {
       <div class="px-6">
@@ -53,7 +54,7 @@ pub fn TypedSection(base: Section) -> impl IntoView {
                 <TypedText 
                   text={header.to_string()} 
                   delay={base.delay} 
-                  interval={header_interval} 
+                  interval={base.header} 
                   centered=false 
                   stop=true 
                 />
@@ -65,7 +66,7 @@ pub fn TypedSection(base: Section) -> impl IntoView {
               view! {
                 <TypedText 
                   text={text.to_string()} 
-                  delay={base.delay + (base.header)().len() as u64 * header_interval + 20} 
+                  delay=text_delay
                   interval={text_interval} 
                   centered=false 
                   stop=true 

@@ -76,7 +76,7 @@ fn Body() -> impl IntoView {
         {move || {
             page.with(|p| match p {
                 Pages::MainMenu => {
-                    set_cmd_text("ms build ./linux.sln");
+                    set_cmd_text("msbuild ./linux.sln");
                     logging::log!("Building MainMenu");
                     MainMenu::View(MainMenu::ViewProps{ 
                         delay: cmd_text().len() as u64 * cmd_interval + 20,
