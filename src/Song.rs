@@ -1,7 +1,9 @@
 use crate::Genre::Genre;
 
-pub struct Song<'a> {
-    duration: u64,
-    author:   &'a str,
-    genre:    Genre,
+#[derive(Debug, Clone)]
+pub struct Song {
+    pub title:    String,
+    pub duration: u64,
+    pub author:   String,
+    pub genre:    Genre,
 }

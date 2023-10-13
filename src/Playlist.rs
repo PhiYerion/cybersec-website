@@ -1,15 +1,31 @@
-/* use leptos::{component, IntoView, create_signal};
+#![feature(iter_collect_into)]
 
-use crate::{Song::Song, Genre::Genre, section::{Section, TypingConfig, StrOption}};
+use leptos::*;
+use crate::{
+    Genre::Genre, 
+    Song::Song, 
+    section::{Section, TypingConfig, TypedSection},
+    typing::TypedText,
+};
 
-pub struct Playlist<'a> {
-    title:  &'a str,
-    author: Option<&'a str>,
-    songs:  Vec<Song<'a>>,
-    genre:  Genre,
+#[derive(Clone, Debug)]
+pub struct Playlist {
+    title:      String,
+    author:     Option<String>,
+    songs:      Vec<Song>,
+    genre:      Genre,
 }
 
-impl Playlist<'_> {
+impl Playlist {
+    pub fn new(title: String, author: Option<String>, genre: Genre) -> Self {
+        Self {
+            title,
+            author,
+            songs: Vec::new(),
+            genre,
+        }
+    }
+
     pub fn add_song(self: &mut Self, song: Song) {
         self.songs.push(song);
     }
@@ -19,7 +35,56 @@ impl Playlist<'_> {
 }
 
 #[component]
-pub fn View<'a>(playlist: &'a Playlist<'a>, delay: u64, cfg: &TypingConfig) -> impl IntoView {
-    let s = stringify!("Author: ", playlist.author, " Genre: ", playlist.genre);
-    let section = Section::new(StrOption::Static(playlist.title), StrOption::Static(s), delay, cfg); 
-} */
+pub fn View(playlist: Playlist, delay: u64) -> impl IntoView {
+    logging::log!("Creating playlist view");
+
+    let mut songlist = String::new();
+    let song_cfg: &'static TypingConfig = &TypingConfig {
+        header_interval:    50,
+        header_classes:     "text-xl text-gray-200",
+        text_interval:      5,
+        text_classes:       "text-bg text-gray-300",
+    };
+
+    for song in playlist.songs {
+        logging::log!("Adding {} to {}", song.title, playlist.title);
+        songlist += &(song.title 
+                 + " by " + &song.author
+                 + "  " + &song.duration.to_string() + " seconds, ");
+    }
+
+    let songs_section = Section::new(
+        String::new(),
+        songlist,
+        delay,
+        &song_cfg,
+    );
+
+    view! {
+        <div class="hackerfont flex px-20 pt-8">
+            <div class="text-white text-2xl pb-8">
+                <TypedText 
+                    text=playlist.title + " "
+                    interval=70
+                    stop=true
+                />
+                <TypedText 
+                    text={ match playlist.author {
+                        Some(author) => { "by ".to_string() + &author + " " },
+                        None         => { String::new() }
+                    }}
+                    interval=70
+                    stop=true
+                />
+                <TypedText 
+                    text=" Genre: ".to_string() + &playlist.genre.to_string() + " "
+                    interval=70
+                    stop=true
+                />
+            </div>
+            <TypedSection
+                base=songs_section
+            />
+        </div>
+    }
+}

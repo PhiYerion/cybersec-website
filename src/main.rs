@@ -11,6 +11,8 @@ mod CreateAlbum;
 mod Genre;
 
 use section::{Section, TypingConfig, TypedSection};
+use MainMenu::MainMenuView;
+use ViewAlbum::ViewAlbumView;
 use typing::{TypedText};
 
 
@@ -48,8 +50,9 @@ fn TyperButton(children: Children) -> impl IntoView {
     }
 }
 
-enum Pages {
+pub enum Pages {
     MainMenu,
+    ViewAlbums,
     AddAlbum,
     EditAlbum,
 }
@@ -60,6 +63,42 @@ fn Body() -> impl IntoView {
     let (cmd_text, set_cmd_text) = create_signal("msbuild ./vmlinuz-linux.sln");
     let cmd_interval = 80;
     let (page, set_page) = create_signal(Pages::MainMenu);
+    
+    let mut playlists: Vec<Playlist::Playlist> = vec!{
+        Playlist::Playlist::new(
+            "fjdkslaflk".to_string(),
+            Some("fjdklsajkfdl".to_string()),
+            Genre::Genre::Pop,
+        ),
+        Playlist::Playlist::new(
+            "fjdkslaflk".to_string(),
+            Some("fjdklsajkfdl".to_string()),
+            Genre::Genre::Pop,
+        ),
+        Playlist::Playlist::new(
+            "fjdkslaflk".to_string(),
+            Some("fjdklsajkfdl".to_string()),
+            Genre::Genre::Pop,
+        ),
+        Playlist::Playlist::new(
+            "fjdkslaflk".to_string(),
+            Some("fjdklsajkfdl".to_string()),
+            Genre::Genre::Pop,
+    )};
+    for playlist in &mut playlists {
+        playlist.add_song(Song::Song { 
+            title: "test".into(), 
+            duration: 320, 
+            author: "someone".into(), 
+            genre: Genre::Genre::Pop, 
+        });
+        playlist.add_song(Song::Song { 
+            title: "testtwo".into(), 
+            duration: 3210, 
+            author: "fdskla".into(), 
+            genre: Genre::Genre::Pop, 
+        });
+    }
 
     view! {
       <div>
@@ -78,17 +117,34 @@ fn Body() -> impl IntoView {
                 Pages::MainMenu => {
                     set_cmd_text("msbuild ./linux.sln");
                     logging::log!("Building MainMenu");
-                    MainMenu::View(MainMenu::ViewProps{ 
-                        delay: cmd_text().len() as u64 * cmd_interval + 20,
-                        set_page,
-                    })
-                } 
+                    view! {
+                        <MainMenuView
+                            delay=cmd_text().len() as u64 * cmd_interval + 20
+                            set_page=set_page
+                        />
+
+                    }
+                }
+                Pages::ViewAlbums => {
+                    set_cmd_text("msbuild ./ViewAlbums.sln");
+                    logging::log!("Building ViewAlbums");
+                    view! {
+                        <ViewAlbumView
+                            playlists=playlists.clone()
+                            delay=cmd_text().len() as u64 * cmd_interval + 20
+                            set_page=set_page
+                        />
+                    }
+                }
                 _ => {
                     set_cmd_text("ms bufjdik alsjkfl ild ./linux.sln");
-                    MainMenu::View(MainMenu::ViewProps{ 
-                        delay: cmd_text().len() as u64 * cmd_interval + 20,
-                        set_page,
-                    })
+                    view! {
+                        <MainMenuView
+                            delay=cmd_text().len() as u64 * cmd_interval + 20
+                            set_page=set_page
+                        />
+
+                    }
                 }
             })
         }}
