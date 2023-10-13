@@ -64,7 +64,7 @@ fn Body() -> impl IntoView {
     let cmd_interval = 80;
     let (page, set_page) = create_signal(Pages::MainMenu);
     
-    let mut playlists: Vec<Playlist::Playlist> = vec!{
+    let mut playlists_base: Vec<Playlist::Playlist> = vec!{
         Playlist::Playlist::new(
             "fjdkslaflk".to_string(),
             Some("fjdklsajkfdl".to_string()),
@@ -85,7 +85,7 @@ fn Body() -> impl IntoView {
             Some("fjdklsajkfdl".to_string()),
             Genre::Genre::Pop,
     )};
-    for playlist in &mut playlists {
+    for playlist in &mut playlists_base {
         playlist.add_song(Song::Song { 
             title: "test".into(), 
             duration: 320, 
@@ -99,6 +99,8 @@ fn Body() -> impl IntoView {
             genre: Genre::Genre::Pop, 
         });
     }
+
+    let (playlists, set_playlists) = create_signal(playlists_base);
 
     view! {
       <div>
@@ -139,7 +141,7 @@ fn Body() -> impl IntoView {
                 _ => {
                     set_cmd_text("ms bufjdik alsjkfl ild ./linux.sln");
                     view! {
-                        <MainMenuView
+                        <CreateSongView
                             delay=cmd_text().len() as u64 * cmd_interval + 20
                             set_page=set_page
                         />
