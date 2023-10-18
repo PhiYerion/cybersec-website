@@ -12,11 +12,24 @@ pub fn start_cursor(set_cursor: WriteSignal<&'static str>) -> Result<IntervalHan
     )
 }
 
+/// Component that types out text supplied to it with a blinking cursor
+///
+/// # Arguements
+/// ## Required
+/// * `text`     - Text to be typed
+/// * `interval` - Miliseconds between each letter
+/// ## Optional
+/// * `centered` - (Def: false) Places a mock cursor to offset blinking cursor
+/// * `stop`     - (Def: false) Stops the cursor after text has been rendered
+/// * `delay`    - (Def: 0) Waits this long before starting typing
+///
+/// # Panics
+/// This function contains timeouts and intervals which have cause problems in the past when this
+/// function goes out of scope but the variables do not.
 #[component]
 pub fn TypedText(
     text: String,
     interval: u64,
-    current_page: ReadSignal<Pages>,
     #[prop(default = false)] centered: bool,
     #[prop(default = false)] stop: bool,
     #[prop(default = 0)] delay: u64,
@@ -32,25 +45,14 @@ pub fn TypedText(
         .try_into()
         .expect("typing ttl error");
 
-    let starting_page = current_page();
-
     set_timeout(
         move || {
             let (index, set_index) = create_signal(0usize);
 
-            if current_page() != starting_page {
-                return;
-            }
             let cursor_handle = start_cursor(set_cursor).expect("unable to start cursor");
 
             let typer = set_interval_with_handle(
                 move || {
-                    if current_page() != starting_page {
-                        logging::log!("{:?} != {:?} : stop", current_page(), starting_page);
-                        return;
-                    }
-                    logging::log!("{:?} != {:?} : continue", current_page(), starting_page);
-
                     if index() >= text.len() {
                         return;
                     };
@@ -74,9 +76,6 @@ pub fn TypedText(
 
             set_timeout(
                 move || {
-                    if current_page() != starting_page {
-                        return;
-                    }
                     logging::log!("Stopping cursor handle({:?})", typer);
                     typer.clear();
                     set_text_finished.update(|x| *x = true);
