@@ -1,56 +1,34 @@
-use leptos::{html::Input, *};
+use crate::{album::Playlist, body::Pages, main_menu::ReturnToMainMenu, song::Genre};
+use leptos::html::Input;
+use leptos::*;
 use web_sys::SubmitEvent;
 
-use crate::{Genre::Genre, MainMenu::ReturnToMainMenu, Pages, Playlist::Playlist, Song};
-
-/* view! {
-} */
-
-/* #[component]
-pub fn RemoveSongPage(
-    playlists: Vec<(ReadSignal<Playlist>, WriteSignal<Playlist>)>,
-    playlist: WriteSignal<Playlist>,
-    set_page: WriteSignal<Pages>,
-) -> impl IntoView {
-    view! {
-        {playlists.into_iter()
-            .map(|p| view! {
-                <div on:click={|| set_page=ViewPlaylist}>
-                  Playlist::View(
-                      Playlist::ViewProps { playlist: p, delay: delay }
-                </div>
-            )}).collect_view()
-        }
-
-        <ReturnToMainMenu
-          set_page=set_page
-        />
-    }
-}
-*/
 #[component]
-pub fn CreateSongPage(
-    playlist: WriteSignal<Playlist>,
+pub fn CreateAlbumPage(
     set_page: WriteSignal<Pages>,
+    set_playlists: WriteSignal<Vec<(ReadSignal<Playlist>, WriteSignal<Playlist>)>>,
+    current_page: ReadSignal<Pages>,
 ) -> impl IntoView {
     let title: NodeRef<Input> = create_node_ref();
     let author: NodeRef<Input> = create_node_ref();
     let genre: NodeRef<Input> = create_node_ref();
-    let duration: NodeRef<Input> = create_node_ref();
 
     let on_submit = move |ev: SubmitEvent| {
         ev.prevent_default();
 
-        let new_song = Song::Song {
-            title: title().expect("Error getting user input").value(),
-            duration: duration()
-                .expect("Error getting user input")
-                .value()
-                .parse()
-                .expect("Error parsing user input for duraction"),
-            author: author().expect("Error getting user input").value(),
-
-            genre: match genre()
+        let new_playlist = Playlist::new(
+            title().expect("Error getting user input").value(),
+            match author() {
+                Some(author) => {
+                    if author.value().trim() == "" {
+                        None
+                    } else {
+                        Some(author.value())
+                    }
+                }
+                None => None,
+            },
+            match genre()
                 .expect("Error getting genre user input")
                 .value()
                 .as_str()
@@ -67,10 +45,9 @@ pub fn CreateSongPage(
                     Genre::Pop
                 }
             },
-        };
+        );
 
-        playlist.update(|p| p.add_song(new_song));
-
+        set_playlists.update(|p| p.push(create_signal(new_playlist)));
         set_page.set(Pages::MainMenu);
     };
 
@@ -99,18 +76,6 @@ pub fn CreateSongPage(
                 node_ref=author
               /> <br/>
             </div>
-          </div>
-          <div class="mb-6">
-            <label class="block uppercase tracking-wide text-gray-300 text-lg font-bold mb-2">
-              Duration
-            </label>
-            <input
-              class="bg-gray-800 text-gray-300 focus:bg-gray-900 w-16 h-8 rounded"
-              type="number"
-              node_ref=duration
-              min="1"
-              max="5"
-            /> <br/>
           </div>
 
           <div class="mb-12">
@@ -152,6 +117,6 @@ pub fn CreateSongPage(
         </form>
 
 
-        <ReturnToMainMenu set_page=set_page/>
+        <ReturnToMainMenu set_page=set_page current_page=current_page/>
     }
 }
