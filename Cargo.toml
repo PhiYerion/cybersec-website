@@ -11,3 +11,8 @@ leptos = { version = "0.5.1", features = ["csr", "nightly"] }
 leptos_router = "0.5.1"
 rand = "0.8.5"
 shuffle = "0.1.7"
+
+[profile.release]
+lto = true
+opt-level = 's'
+
