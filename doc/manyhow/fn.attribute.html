@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Handles `proc_macro_attribute` implementation"><title>attribute in manyhow - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="manyhow" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (bf9a1c8a1 2023-10-08)" data-channel="nightly" data-search-js="search-5f5ec5419eadd0c9.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../manyhow/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a></nav><nav class="sidebar"><a class="logo-container" href="../manyhow/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In manyhow</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="index.html">manyhow</a>::<wbr><a class="fn" href="#">attribute</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/manyhow/lib.rs.html#292-326">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn attribute&lt;Input: <a class="trait" href="trait.AnyTokenStream.html" title="trait manyhow::AnyTokenStream">AnyTokenStream</a>, Item: <a class="trait" href="trait.AnyTokenStream.html" title="trait manyhow::AnyTokenStream">AnyTokenStream</a>, Output: <a class="trait" href="trait.AnyTokenStream.html" title="trait manyhow::AnyTokenStream">AnyTokenStream</a>, Return: <a class="trait" href="trait.AnyTokenStream.html" title="trait manyhow::AnyTokenStream">AnyTokenStream</a>, Error: <a class="trait" href="trait.ToTokensError.html" title="trait manyhow::ToTokensError">ToTokensError</a>, Function&gt;(
+    input: impl <a class="trait" href="trait.AnyTokenStream.html" title="trait manyhow::AnyTokenStream">AnyTokenStream</a>,
+    item: impl <a class="trait" href="trait.AnyTokenStream.html" title="trait manyhow::AnyTokenStream">AnyTokenStream</a>,
+    item_as_dummy: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>,
+    body: impl <a class="trait" href="trait.MacroHandler.html" title="trait manyhow::MacroHandler">MacroHandler</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(Input, Item)</a>, Output, Function, Error&gt;
+) -&gt; Return</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Handles <a href="https://doc.rust-lang.org/reference/procedural-macros.html#attribute-macros"><code>proc_macro_attribute</code></a>
+implementation</p>
+<p>Takes any <code>TokenStream</code> for <code>input</code> and <code>item</code> and returns any
+<code>TokenStream</code>. If <code>item_as_dummy = true</code> the item input will be used as
+default dummy code on error. <code>body</code> takes a <a href="trait.MacroHandler.html" title="trait manyhow::MacroHandler"><code>MacroHandler</code></a> with two
+<code>TokenStream</code> parameters. And an optional <a href="struct.Emitter.html" title="struct manyhow::Emitter"><code>&amp;mut Emitter</code></a> and a
+<code>&amp;mut TokenStream</code> for storing a dummy output.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>manyhow::{attribute, Emitter, <span class="prelude-ty">Result</span>};
+<span class="kw">use </span>proc_macro2::TokenStream;
+attribute(
+    input,
+    item,
+    <span class="bool-val">false</span>,
+    |input: TokenStream,
+     item: TokenStream,
+     dummy: <span class="kw-2">&amp;mut </span>TokenStream,
+     emitter: <span class="kw-2">&amp;mut </span>Emitter|
+     -&gt; <span class="prelude-ty">Result </span>{
+        <span class="comment">// ..
+    </span>},
+);</code></pre></div>
+<p><em>Note:</em> When <code>item_as_dummy = true</code> the <code>dummy: &amp;mut TokenStream</code> will be
+initialized with <code>item</code>. To override assign a new <code>TokenStream</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>manyhow::{attribute, <span class="prelude-ty">Result</span>, SilentError};
+<span class="kw">use </span>proc_macro2::TokenStream;
+<span class="kw">use </span>quote::{quote, ToTokens};
+<span class="kw">let </span>item = <span class="macro">quote!</span>(
+    <span class="kw">struct </span>Struct;
+);
+<span class="kw">let </span>output: TokenStream = attribute(
+    input,
+    item,
+    <span class="bool-val">true</span>,
+    |input: TokenStream,
+     item: TokenStream,
+     dummy: <span class="kw-2">&amp;mut </span>TokenStream|
+     -&gt; <span class="prelude-ty">Result</span>&lt;TokenStream, SilentError&gt; {
+        <span class="macro">assert_tokens!</span>(dummy.to_token_stream(), {
+            <span class="kw">struct </span>Struct;
+        });
+        <span class="kw-2">*</span>dummy = <span class="macro">quote! </span>{
+            <span class="kw">struct </span>Struct(HelloWorld);
+        };
+        <span class="comment">// ..
+        </span><span class="prelude-val">Err</span>(SilentError)
+    },
+);
+
+<span class="macro">assert_tokens! </span>{output, {<span class="kw">struct </span>Struct(HelloWorld);}};</code></pre></div>
+</div></details></section></div></main></body></html>

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["add_song_page","album_list_page","album_page","create_album","playlist"]};

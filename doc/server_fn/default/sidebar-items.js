@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"attr":["server"],"fn":["server_fn_by_path","server_fns_by_path"],"struct":["DefaultServerFnTraitObj"]};

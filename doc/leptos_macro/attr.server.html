@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Declares that a function is a server function. This means that its body will only run on the server, i.e., when the `ssr` feature is enabled."><title>server in leptos_macro - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="leptos_macro" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (bf9a1c8a1 2023-10-08)" data-channel="nightly" data-search-js="search-5f5ec5419eadd0c9.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc attr"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../leptos_macro/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a></nav><nav class="sidebar"><a class="logo-container" href="../leptos_macro/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><div class="sidebar-elems"><h2><a href="index.html">In leptos_macro</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Attribute Macro <a href="index.html">leptos_macro</a>::<wbr><a class="attr" href="#">server</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/leptos_macro/lib.rs.html#945">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>#[server]</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Declares that a function is a <a href="https://docs.rs/server_fn/latest/server_fn/index.html">server function</a>.
+This means that its body will only run on the server, i.e., when the <code>ssr</code> feature is enabled.</p>
+<p>If you call a server function from the client (i.e., when the <code>csr</code> or <code>hydrate</code> features
+are enabled), it will instead make a network request to the server.</p>
+<p>You can specify one, two, three, or four arguments to the server function. All of these arguments are optional.</p>
+<ol>
+<li>A type name that will be used to identify and register the server function
+(e.g., <code>MyServerFn</code>). Defaults to a PascalCased version of the function name.</li>
+<li>A URL prefix at which the function will be mounted when it’s registered
+(e.g., <code>&quot;/api&quot;</code>). Defaults to <code>&quot;/api&quot;</code>.</li>
+<li>The encoding for the server function (<code>&quot;Url&quot;</code>, <code>&quot;Cbor&quot;</code>, <code>&quot;GetJson&quot;</code>, or <code>&quot;GetCbor</code>“. See <strong>Server Function Encodings</strong> below.)</li>
+<li>A specific endpoint path to be used in the URL. (By default, a unique path will be generated.)</li>
+</ol>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="comment">// will generate a server function at `/api-prefix/hello`
+</span><span class="attr">#[server(MyServerFnType, <span class="string">&quot;/api-prefix&quot;</span>, <span class="string">&quot;Url&quot;</span>, <span class="string">&quot;hello&quot;</span>)]
+</span><span class="kw">pub async fn </span>my_server_fn_type() <span class="comment">/* ... */
+
+// will generate a server function with struct `HelloWorld` and path
+// `/api/hello2349232342342` (hash based on location in source)
+</span><span class="attr">#[server]
+</span><span class="kw">pub async fn </span>hello_world() <span class="comment">/* ... */</span></code></pre></div>
+<p>The server function itself can take any number of arguments, each of which should be serializable
+and deserializable with <code>serde</code>.</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[server(ReadPosts, <span class="string">&quot;/api&quot;</span>)]
+</span><span class="kw">pub async fn </span>read_posts(how_many: u8, query: String) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Post&gt;, ServerFnError&gt; {
+  <span class="comment">// do some work on the server to access the database
+  </span><span class="macro">todo!</span>()
+}</code></pre></div>
+<p>Note the following:</p>
+<ul>
+<li><strong>Server functions must be <code>async</code>.</strong> Even if the work being done inside the function body
+can run synchronously on the server, from the client’s perspective it involves an asynchronous
+function call.</li>
+<li><strong>Server functions must return <code>Result&lt;T, ServerFnError&gt;</code>.</strong> Even if the work being done
+inside the function body can’t fail, the processes of serialization/deserialization and the
+network call are fallible.</li>
+<li><strong>Return types must implement <a href="https://docs.rs/serde/latest/serde/trait.Serialize.html"><code>Serialize</code></a>.</strong>
+This should be fairly obvious: we have to serialize arguments to send them to the server, and we
+need to deserialize the result to return it to the client.</li>
+<li><strong>Arguments must implement <a href="https://docs.rs/serde/latest/serde/trait.Serialize.html"><code>Serialize</code></a>
+and <a href="https://docs.rs/serde/latest/serde/de/trait.DeserializeOwned.html"><code>DeserializeOwned</code></a>.</strong>
+They are serialized as an <code>application/x-www-form-urlencoded</code>
+form data using <a href="https://docs.rs/serde_qs/latest/serde_qs/"><code>serde_qs</code></a> or as <code>application/cbor</code>
+using <a href="https://docs.rs/cbor/latest/cbor/"><code>cbor</code></a>. <strong>Note</strong>: You should explicitly include <code>serde</code> with the
+<code>derive</code> feature enabled in your <code>Cargo.toml</code>. You can do this by running <code>cargo add serde --features=derive</code>.</li>
+<li><strong>Context comes from the server.</strong> Server functions are provided access to the HTTP request and other relevant
+server data via the server integrations, but they do <em>not</em> have access to reactive state that exists in the client.</li>
+<li>Your server must be ready to handle the server functions at the API prefix you list. The easiest way to do this
+is to use the <code>handle_server_fns</code> function from <a href="https://docs.rs/leptos_actix/latest/leptos_actix/fn.handle_server_fns.html"><code>leptos_actix</code></a>
+or <a href="https://docs.rs/leptos_axum/latest/leptos_axum/fn.handle_server_fns.html"><code>leptos_axum</code></a>.</li>
+<li><strong>Server functions must have unique paths</strong>. Unique paths are automatically generated for each
+server function. If you choose to specify a path in the fourth argument, you must ensure that these
+are unique. You cannot define two server functions with the same URL prefix and endpoint path,
+even if they have different URL encodings, e.g. a POST method at <code>/api/foo</code> and a GET method at <code>/api/foo</code>.</li>
+</ul>
+<h3 id="server-function-encodings"><a href="#server-function-encodings">Server Function Encodings</a></h3>
+<p>By default, the server function call is a <code>POST</code> request that serializes the arguments as URL-encoded form data in the body
+of the request. But there are a few other methods supported. Optionally, we can provide another argument to the <code>#[server]</code>
+macro to specify an alternate encoding:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[server(AddTodo, <span class="string">&quot;/api&quot;</span>, <span class="string">&quot;Url&quot;</span>)]
+#[server(AddTodo, <span class="string">&quot;/api&quot;</span>, <span class="string">&quot;GetJson&quot;</span>)]
+#[server(AddTodo, <span class="string">&quot;/api&quot;</span>, <span class="string">&quot;Cbor&quot;</span>)]
+#[server(AddTodo, <span class="string">&quot;/api&quot;</span>, <span class="string">&quot;GetCbor&quot;</span>)]</span></code></pre></div>
+<p>The four options use different combinations of HTTP verbs and encoding methods:</p>
+<div><table><thead><tr><th>Name</th><th>Method</th><th>Request</th><th>Response</th></tr></thead><tbody>
+<tr><td><strong>Url</strong> (default)</td><td>POST</td><td>URL encoded</td><td>JSON</td></tr>
+<tr><td><strong>GetJson</strong></td><td>GET</td><td>URL encoded</td><td>JSON</td></tr>
+<tr><td><strong>Cbor</strong></td><td>POST</td><td>CBOR</td><td>CBOR</td></tr>
+<tr><td><strong>GetCbor</strong></td><td>GET</td><td>URL encoded</td><td>CBOR</td></tr>
+</tbody></table>
+</div>
+<p>In other words, you have two choices:</p>
+<ul>
+<li><code>GET</code> or <code>POST</code>? This has implications for things like browser or CDN caching; while <code>POST</code> requests should not be cached,
+<code>GET</code> requests can be.</li>
+<li>Plain text (arguments sent with URL/form encoding, results sent as JSON) or a binary format (CBOR, encoded as a base64
+string)?</li>
+</ul>
+<h3 id="why-not-put-or-delete-why-urlform-encoding-and-not-json"><a href="#why-not-put-or-delete-why-urlform-encoding-and-not-json">Why not <code>PUT</code> or <code>DELETE</code>? Why URL/form encoding, and not JSON?**</a></h3>
+<p>These are reasonable questions. Much of the web is built on REST API patterns that encourage the use of semantic HTTP
+methods like <code>DELETE</code> to delete an item from a database, and many devs are accustomed to sending data to APIs in the
+JSON format.</p>
+<p>The reason we use <code>POST</code> or <code>GET</code> with URL-encoded data by default is the <code>&lt;form&gt;</code> support. For better or for worse,
+HTML forms don’t support <code>PUT</code> or <code>DELETE</code>, and they don’t support sending JSON. This means that if you use anything
+but a <code>GET</code> or <code>POST</code> request with URL-encoded data, it can only work once WASM has loaded.</p>
+<p>The CBOR encoding is suported for historical reasons; an earlier version of server functions used a URL encoding that
+didn’t support nested objects like structs or vectors as server function arguments, which CBOR did. But note that the
+CBOR forms encounter the same issue as <code>PUT</code>, <code>DELETE</code>, or JSON: they do not degrade gracefully if the WASM version of
+your app is not available.</p>
+</div></details></section></div></main></body></html>

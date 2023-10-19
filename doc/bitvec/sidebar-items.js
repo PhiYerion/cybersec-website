@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":["bitbox","bits","bitvec"],"mod":["boxed","cursor","fields","indices","macros","order","prelude","slice","store","vec"]};

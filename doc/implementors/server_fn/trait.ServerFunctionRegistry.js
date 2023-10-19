@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"leptos_server":[["impl <a class=\"trait\" href=\"server_fn/trait.ServerFunctionRegistry.html\" title=\"trait server_fn::ServerFunctionRegistry\">ServerFunctionRegistry</a>&lt;<a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.unit.html\">()</a>&gt; for <a class=\"struct\" href=\"leptos_server/struct.LeptosServerFnRegistry.html\" title=\"struct leptos_server::LeptosServerFnRegistry\">LeptosServerFnRegistry</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

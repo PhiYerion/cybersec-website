@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Callbacks define a standard way to store functions and closures. They are useful for component properties, because they can be used to define optional callback functions, which generic props don’t support."><title>leptos::callback - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="leptos" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (bf9a1c8a1 2023-10-08)" data-channel="nightly" data-search-js="search-5f5ec5419eadd0c9.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../leptos/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a></nav><nav class="sidebar"><a class="logo-container" href="../../leptos/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module callback</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">leptos</a>::<wbr><a class="mod" href="#">callback</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/leptos_reactive/lib.rs.html#83">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Callbacks define a standard way to store functions and closures. They are useful
+for component properties, because they can be used to define optional callback functions,
+which generic props don’t support.</p>
+<h2 id="usage"><a href="#usage">Usage</a></h2>
+<p>Callbacks can be created manually from any function or closure, but the easiest way
+to create them is to use <code>#[prop(into)]]</code> when defining a component.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[component]
+</span><span class="kw">fn </span>MyComponent(
+    <span class="attr">#[prop(into)] </span>render_number: Callback&lt;i32, String&gt;,
+) -&gt; <span class="kw">impl </span>IntoView {
+    <span class="macro">view! </span>{
+        &lt;div&gt;
+            {render_number.call(<span class="number">1</span>)}
+            <span class="comment">// callbacks can be called multiple times
+            </span>{render_number.call(<span class="number">42</span>)}
+        &lt;/div&gt;
+    }
+}
+<span class="comment">// you can pass a closure directly as `render_number`
+</span><span class="kw">fn </span>test() -&gt; <span class="kw">impl </span>IntoView {
+    <span class="macro">view! </span>{
+        &lt;MyComponent render_number=|x: i32| x.to_string()/&gt;
+    }
+}</code></pre></div>
+<p><em>Notes</em>:</p>
+<ul>
+<li>The <code>render_number</code> prop can receive any type that implements <code>Fn(i32) -&gt; String</code>.</li>
+<li>Callbacks are most useful when you want optional generic props.</li>
+<li>All callbacks implement the <a href="../trait.Callable.html" title="trait leptos::Callable"><code>Callable</code></a> trait, and can be invoked with <code>my_callback.call(input)</code>. On nightly, you can even do <code>my_callback(input)</code></li>
+<li>The callback types implement <a href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy"><code>Copy</code></a>, so they can easily be moved into and out of other closures, just like signals.</li>
+</ul>
+<h2 id="types"><a href="#types">Types</a></h2>
+<p>This modules implements 2 callback types:</p>
+<ul>
+<li><a href="../struct.Callback.html" title="struct leptos::Callback"><code>Callback</code></a></li>
+<li><a href="../struct.SyncCallback.html" title="struct leptos::SyncCallback"><code>SyncCallback</code></a></li>
+</ul>
+<p>Use <code>SyncCallback</code> when you want the function to be <code>Sync</code> and <code>Send</code>.</p>
+</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Callback.html" title="struct leptos::callback::Callback">Callback</a></div><div class="desc docblock-short">Callbacks define a standard way to store functions and closures.</div></li><li><div class="item-name"><a class="struct" href="struct.SyncCallback.html" title="struct leptos::callback::SyncCallback">SyncCallback</a></div><div class="desc docblock-short">A callback type that is <code>Send</code> and <code>Sync</code> if its input type is <code>Send</code> and <code>Sync</code>.
+Otherwise, you can use exactly the way you use <a href="../struct.Callback.html" title="struct leptos::Callback"><code>Callback</code></a>.</div></li></ul><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.Callable.html" title="trait leptos::callback::Callable">Callable</a></div><div class="desc docblock-short">A wrapper trait for calling callbacks.</div></li></ul></section></div></main></body></html>

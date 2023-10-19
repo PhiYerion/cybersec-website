@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="An ordering over an element."><title>BitOrder in bitvec::order - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="bitvec" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (bf9a1c8a1 2023-10-08)" data-channel="nightly" data-search-js="search-5f5ec5419eadd0c9.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../bitvec/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a></nav><nav class="sidebar"><a class="logo-container" href="../../bitvec/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">BitOrder</a></h2><div class="sidebar-elems"><section><h3><a href="#required-associated-consts">Required Associated Constants</a></h3><ul class="block"><li><a href="#associatedconstant.TYPENAME">TYPENAME</a></li></ul><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.at">at</a></li></ul><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.mask">mask</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In bitvec::order</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../index.html">bitvec</a>::<wbr><a href="index.html">order</a>::<wbr><a class="trait" href="#">BitOrder</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/bitvec/order.rs.html#43-152">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait BitOrder {
+    const <a href="#associatedconstant.TYPENAME" class="constant">TYPENAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>;
+
+    // Required method
+    fn <a href="#tymethod.at" class="fn">at</a>&lt;T&gt;(place: <a class="struct" href="../indices/struct.BitIdx.html" title="struct bitvec::indices::BitIdx">BitIdx</a>&lt;T&gt;) -&gt; <a class="struct" href="../indices/struct.BitPos.html" title="struct bitvec::indices::BitPos">BitPos</a>&lt;T&gt;
+       <span class="where">where T: <a class="trait" href="../store/trait.BitStore.html" title="trait bitvec::store::BitStore">BitStore</a></span>;
+
+    // Provided method
+    fn <a href="#method.mask" class="fn">mask</a>&lt;T&gt;(place: <a class="struct" href="../indices/struct.BitIdx.html" title="struct bitvec::indices::BitIdx">BitIdx</a>&lt;T&gt;) -&gt; <a class="struct" href="../indices/struct.BitMask.html" title="struct bitvec::indices::BitMask">BitMask</a>&lt;T&gt;
+       <span class="where">where T: <a class="trait" href="../store/trait.BitStore.html" title="trait bitvec::store::BitStore">BitStore</a></span> { ... }
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>An ordering over an element.</p>
+<h2 id="usage"><a href="#usage">Usage</a></h2>
+<p><code>bitvec</code> structures store and operate on semantic counts, not bit positions. The
+<code>BitOrder::at</code> function takes a semantic ordering, <code>BitIdx</code>, and produces an
+electrical position, <code>BitPos</code>.</p>
+</div></details><h2 id="required-associated-consts" class="small-section-header">Required Associated Constants<a href="#required-associated-consts" class="anchor">§</a></h2><div class="methods"><details class="toggle" open><summary><section id="associatedconstant.TYPENAME" class="method"><a class="src rightside" href="../../src/bitvec/order.rs.html#45">source</a><h4 class="code-header">const <a href="#associatedconstant.TYPENAME" class="constant">TYPENAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a></h4></section></summary><div class="docblock"><p>Name of the ordering type, for use in text display.</p>
+</div></details></div><h2 id="required-methods" class="small-section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="tymethod.at" class="method"><a class="src rightside" href="../../src/bitvec/order.rs.html#99-100">source</a><h4 class="code-header">fn <a href="#tymethod.at" class="fn">at</a>&lt;T&gt;(place: <a class="struct" href="../indices/struct.BitIdx.html" title="struct bitvec::indices::BitIdx">BitIdx</a>&lt;T&gt;) -&gt; <a class="struct" href="../indices/struct.BitPos.html" title="struct bitvec::indices::BitPos">BitPos</a>&lt;T&gt;<span class="where fmt-newline">where
+    T: <a class="trait" href="../store/trait.BitStore.html" title="trait bitvec::store::BitStore">BitStore</a>,</span></h4></section></summary><div class="docblock"><p>Translate a semantic bit index into an electrical bit position.</p>
+<h5 id="parameters"><a href="#parameters">Parameters</a></h5>
+<ul>
+<li><code>place</code>: The semantic bit value.</li>
+</ul>
+<h5 id="returns"><a href="#returns">Returns</a></h5>
+<ul>
+<li>A concrete position. This value can be used for shifting and masking
+to extract a bit from an element. This must be in the domain
+<code>0 .. T::BITS</code>.</li>
+</ul>
+<h5 id="type-parameters"><a href="#type-parameters">Type Parameters</a></h5>
+<ul>
+<li><code>T: BitStore</code>: The storage type for which the position will be
+calculated.</li>
+</ul>
+<h5 id="invariants"><a href="#invariants">Invariants</a></h5>
+<p>The function <strong>must</strong> be <em>total</em> for the domain <code>.. T::BITS</code>. All values
+in this domain are valid indices that the library will pass to it, and
+which this function must satisfy.</p>
+<p>The function <strong>must</strong> be <em>bijective</em> over the domain <code>.. T::BITS</code>. All
+input values in this domain must have one and only one correpsonding
+output, which must also be in this domain.</p>
+<p>The function <em>may</em> support input in the domain <code>T::BITS ..</code>. The library
+will not produce any values in this domain as input indices. The
+function <strong>must not</strong> produce output in the domain <code>T::BITS ..</code>. It must
+choose between panicking, or producing an output in <code>.. T::BITS</code>. The
+reduction in domain from <code>T::BITS ..</code> to <code>.. T::BITS</code> removes the
+requirement for inputs in <code>T::BITS ..</code> to have unique outputs in
+<code>.. T::BITS</code>.</p>
+<p>This function <strong>must</strong> be <em>pure</em>. Calls which have the same input must
+produce the same output. This invariant is only required to be upheld
+for the lifetime of all data structures which use an implementor. The
+behavior of the function <em>may</em> be modified after all existing dependent
+data structures are destroyed and before any new dependent data
+structures are created.</p>
+<h5 id="non-invariants"><a href="#non-invariants">Non-Invariants</a></h5>
+<p>This function is <em>not</em> required to be stateless. It <em>may</em> refer to
+immutable global state, subject to the purity requirement on lifetimes.</p>
+<h5 id="safety"><a href="#safety">Safety</a></h5>
+<p>This function requires that the output be in the domain <code>.. T::BITS</code>.
+Implementors must uphold this themselves. Outputs in the domain
+<code>T::BITS ..</code> will induce panics elsewhere in the library.</p>
+</div></details></div><h2 id="provided-methods" class="small-section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.mask" class="method"><a class="src rightside" href="../../src/bitvec/order.rs.html#141-151">source</a><h4 class="code-header">fn <a href="#method.mask" class="fn">mask</a>&lt;T&gt;(place: <a class="struct" href="../indices/struct.BitIdx.html" title="struct bitvec::indices::BitIdx">BitIdx</a>&lt;T&gt;) -&gt; <a class="struct" href="../indices/struct.BitMask.html" title="struct bitvec::indices::BitMask">BitMask</a>&lt;T&gt;<span class="where fmt-newline">where
+    T: <a class="trait" href="../store/trait.BitStore.html" title="trait bitvec::store::BitStore">BitStore</a>,</span></h4></section></summary><div class="docblock"><p>Translate a semantic bit index into an electrical bit mask.</p>
+<p>This is an optional function; a default implementation is provided for
+you.</p>
+<p>The default implementation of this function calls <code>Self::at</code> to produce
+an electrical position, then turns that into a bitmask by setting the
+<code>n</code>th bit more significant than the least significant bit of the
+element. <code>BitOrder</code> implementations may choose to provide a faster mask
+production here, but they must satisfy the invariants listed below.</p>
+<h5 id="parameters-1"><a href="#parameters-1">Parameters</a></h5>
+<ul>
+<li><code>place</code>: A semantic bit index into a memory element.</li>
+</ul>
+<h5 id="returns-1"><a href="#returns-1">Returns</a></h5>
+<p>A one-hot encoding of the provided <code>BitOrder</code>’s electrical position in the
+<code>T</code> element.</p>
+<h5 id="type-parameters-1"><a href="#type-parameters-1">Type Parameters</a></h5>
+<ul>
+<li><code>T</code>: The storage type for which the mask will be calculated. The mask
+must also be this type, as it will be applied to an element of <code>T</code> in
+order to set, clear, or test a single bit.</li>
+</ul>
+<h5 id="invariants-1"><a href="#invariants-1">Invariants</a></h5>
+<p>A one-hot encoding means that there is exactly one bit set in the
+produced value. It must be equivalent to <code>1 &lt;&lt; *Self::at(place)</code>.</p>
+<p>As with <code>at</code>, this function must produce a unique mapping from each
+legal index in the <code>T</code> domain to a one-hot value of <code>T</code>.</p>
+<h5 id="safety-1"><a href="#safety-1">Safety</a></h5>
+<p>This function requires that the output is always a one-hot value. It is
+illegal to produce a value with more than one bit set, and doing so will
+cause uncontrolled side effects.</p>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><details class="toggle implementors-toggle"><summary><section id="impl-BitOrder-for-Lsb0" class="impl"><a class="src rightside" href="../../src/bitvec/order.rs.html#175-191">source</a><a href="#impl-BitOrder-for-Lsb0" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.BitOrder.html" title="trait bitvec::order::BitOrder">BitOrder</a> for <a class="struct" href="struct.Lsb0.html" title="struct bitvec::order::Lsb0">Lsb0</a></h3></section></summary><div class="impl-items"><section id="associatedconstant.TYPENAME-1" class="associatedconstant trait-impl"><a class="src rightside" href="../../src/bitvec/order.rs.html#176">source</a><a href="#associatedconstant.TYPENAME-1" class="anchor">§</a><h4 class="code-header">const <a href="#associatedconstant.TYPENAME" class="constant">TYPENAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a> = &quot;Lsb0&quot;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-BitOrder-for-Msb0" class="impl"><a class="src rightside" href="../../src/bitvec/order.rs.html#154-173">source</a><a href="#impl-BitOrder-for-Msb0" class="anchor">§</a><h3 class="code-header">impl <a class="trait" href="trait.BitOrder.html" title="trait bitvec::order::BitOrder">BitOrder</a> for <a class="struct" href="struct.Msb0.html" title="struct bitvec::order::Msb0">Msb0</a></h3></section></summary><div class="impl-items"><section id="associatedconstant.TYPENAME-2" class="associatedconstant trait-impl"><a class="src rightside" href="../../src/bitvec/order.rs.html#155">source</a><a href="#associatedconstant.TYPENAME-2" class="anchor">§</a><h4 class="code-header">const <a href="#associatedconstant.TYPENAME" class="constant">TYPENAME</a>: &amp;'static <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a> = &quot;Msb0&quot;</h4></section></div></details></div><script src="../../implementors/bitvec/order/trait.BitOrder.js" async></script></section></div></main></body></html>

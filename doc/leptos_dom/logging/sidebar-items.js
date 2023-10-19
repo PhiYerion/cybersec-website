@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["console_debug_warn","console_error","console_log","console_warn"]};

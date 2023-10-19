@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["KeyedAttributeValue","Node","NodeAttribute","NodeBlock","NodeName","NodeNameFragment","NodeType"],"mod":["atoms","parse"],"struct":["AttributeValueExpr","FnBinding","KeyedAttribute","NodeComment","NodeDoctype","NodeElement","NodeFragment","NodeText","RawText"]};

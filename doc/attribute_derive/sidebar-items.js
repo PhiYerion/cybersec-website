@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":["FromAttr"],"enum":["FlagOrValue"],"struct":["Array","IdentValue"],"trait":["AttributeIdent","ConvertParsed","Error","FromAttr","TryExtendOne"]};
