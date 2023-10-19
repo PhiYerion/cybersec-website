@@ -2,13 +2,14 @@ use rand::Rng;
 
 use crate::{
     body::Pages,
-    section::{Section, TypedSection, TypingConfig},
+    section::{Section, TypedSection, TypedSectionProps, TypingConfig},
     song::genre::Genre,
     song::song::Song,
     utils::TypedText,
 };
 use leptos::*;
 
+/// A simple playlist struct
 #[derive(Clone, Debug)]
 pub struct Playlist {
     pub title: String,
@@ -19,6 +20,12 @@ pub struct Playlist {
 }
 
 impl Playlist {
+    /// Create a new playlist out of required feilds.
+    /// This will select a random image and create an empty list of songs for your playlist.
+    ///
+    /// # Image Not Found
+    /// This assumes that there are images {1,2,3,4,5}.jpg in /assets. If there are not, there will
+    /// be a false link to one.
     pub fn new(title: String, author: Option<String>, genre: Genre) -> Self {
         let mut rng = rand::thread_rng();
         let image = "/assets/".to_string() + &rng.gen_range(1..=5).to_string() + ".jpg";
@@ -31,43 +38,38 @@ impl Playlist {
         }
     }
 
+    /// Adds a song to the playlist by pushing it onto the vec
     pub fn add_song(self: &mut Self, song: Song) {
         self.songs.push(song);
     }
+    /// Deletes a song by index
     pub fn delete_song(self: &mut Self, index: usize) {
         self.songs.remove(index);
     }
 }
 
+/// Creates a basic view of a [Playlist].
+///
+/// # Arguments
+/// * `playlist` - [Playlist] to show
+/// * `delay` - Delay in milliseconds before starting the view
 #[component]
-pub fn PlaylistView(
-    playlist: Playlist,
-    delay: u64,
-    current_page: ReadSignal<Pages>,
-) -> impl IntoView {
+pub fn PlaylistView(playlist: Playlist) -> impl IntoView {
     logging::log!("Creating playlist view");
 
-    let mut songlist = String::new();
-    let song_cfg: &'static TypingConfig = &TypingConfig {
-        header_interval: 50,
-        header_classes: "text-xl text-gray-200",
-        text_interval: 5,
-        text_classes: "text-bg text-gray-300",
-    };
+    // list that will later be displayed
+    let mut songlist: Vec<String> = Vec::new();
 
+    // Add formatted string to songlist
     for song in playlist.songs {
         logging::log!("Adding {} to {}", song.title, playlist.title);
-        songlist += &(song.title
-            + " by "
-            + &song.author
-            + "  "
-            + &song.duration.to_string()
-            + " seconds, ");
+        songlist.push(
+            song.title + " by " + &song.author + "  " + &song.duration.to_string() + " seconds",
+        );
     }
 
-    let songs_section = Section::new(String::new(), songlist, delay, &song_cfg);
-
     view! {
+        // # Playlist meta
         <div class="hackerfont flex px-20 pt-8">
             <img src=playlist.image class="w-[10vw] h-[10vw] mr-8" />
             <div class="text-white text-2xl pb-8">
@@ -75,7 +77,6 @@ pub fn PlaylistView(
                     text=playlist.title + " "
                     interval=70
                     stop=true
-                    current_page=current_page
                 />
                 <TypedText
                     text={ match playlist.author {
@@ -84,19 +85,28 @@ pub fn PlaylistView(
                     }}
                     interval=70
                     stop=true
-                    current_page=current_page
                 />
                 <TypedText
                     text=" Genre: ".to_string() + &playlist.genre.to_string() + " "
                     interval=70
                     stop=true
-                    current_page=current_page
                 />
             </div>
-            <TypedSection
-                base=songs_section
-                current_page=current_page
-            />
+            // # Songs
+            <div class = "ml-20">
+                {songlist.into_iter().map(|s| {
+                    view! {
+                        <TypedText
+                            text=s.clone()
+                            interval=70
+                            centered=false
+                            stop=true
+                            delay=s.len() as u64 * 10
+                        />
+                        <br/>
+                    }
+                }).collect_view()}
+            </div>
         </div>
     }
 }

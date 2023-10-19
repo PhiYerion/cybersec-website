@@ -1,6 +1,10 @@
 use crate::album::playlist::Playlist;
 use crate::song::{Genre, Song};
 
+/// Create a test, placeholder list of [Playlist]s
+///
+/// # Returns
+/// A [Vec] of four [Playlist]s with two [Song]s each
 pub fn create_test_playlists() -> Vec<Playlist> {
     let mut playlists_base: Vec<Playlist> = vec![
         Playlist::new(

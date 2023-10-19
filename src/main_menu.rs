@@ -7,11 +7,12 @@ use crate::{
     utils::TypedText,
 };
 
+/// A button that returns to the MainMenu page
+///
+/// This creates a [PointerOnHover] button with [TypedText] that changes [global
+/// state's](crate::body::Body) page variable with `set_page` arguement.
 #[component]
-pub fn ReturnToMainMenu(
-    set_page: WriteSignal<Pages>,
-    current_page: ReadSignal<Pages>,
-) -> impl IntoView {
+pub fn ReturnToMainMenu(set_page: WriteSignal<Pages>) -> impl IntoView {
     view! {
       <div class="bottom-0 fixed w-full pb-20 hackerfont text-white text-4xl flex items-center justify-center pt-4">
         <PointerOnHover on:click=move |_| {set_page(Pages::MainMenu)}>
@@ -19,19 +20,20 @@ pub fn ReturnToMainMenu(
             text="ReturnToMainMenu".to_string()
             interval=7
             delay=1000
-            current_page=current_page
           />
         </PointerOnHover>
       </div>
     }
 }
 
+/// The page that gives the user all entry-level options.
+/// This includes viewing the list of albums and creating new albums
+///
+/// # Arguements
+/// * `delay` - milliseconds to wait before rendering
+/// * `set_page` - global set_page state to use
 #[component]
-pub fn MainMenuPage(
-    delay: u64,
-    set_page: WriteSignal<Pages>,
-    current_page: ReadSignal<Pages>,
-) -> impl IntoView {
+pub fn MainMenuPage(delay: u64, set_page: WriteSignal<Pages>) -> impl IntoView {
     const hero_typing_cfg: TypingConfig = TypingConfig {
         header_interval: 70,
         header_classes: "text-4xl text-white",
@@ -57,12 +59,12 @@ pub fn MainMenuPage(
       <div class="text-gray-200 flex hackerfont text-gray-200 text-base items-center self-center px-[25vw] pt-8">
         <div class="px-8">
           <PointerOnHover on:click=move |_| {set_page(Pages::ViewAlbumList)}>
-            <TypedSection base=view_album current_page=current_page/>
+            <TypedSection base=view_album/>
           </PointerOnHover>
         </div>
         <div class="px-8">
           <PointerOnHover on:click=move |_| {set_page(Pages::AddAlbum)}>
-            <TypedSection base=create_album current_page=current_page/>
+            <TypedSection base=create_album/>
           </PointerOnHover>
         </div>
       </div>

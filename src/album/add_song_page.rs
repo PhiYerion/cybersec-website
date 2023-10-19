@@ -3,20 +3,33 @@ use web_sys::SubmitEvent;
 
 use crate::{album::Playlist, body::Pages, main_menu::ReturnToMainMenu, song::Genre, song::Song};
 
+/// Add a [Song] to a [Playlist].
+/// Displays a series of input boxes to allow user to enter Author, [Genre], Duration, and Title
+/// for the song to be added.
+/// In current implimentation, [the album page](crate::album::ViewAlbumPage) redirects here through
+/// setting the [global playlist buffer](crate::body::Body) and changing the [page](Pages)
+///
+/// # Arguements
+/// * `set_playlist` - [WriteSignal] to playlist that will be added to
+/// * `set_page` - [global set_page](crate::body::Body)
+
 #[component]
 pub fn AddSongPage(
     set_playlist: WriteSignal<Playlist>,
     set_page: WriteSignal<Pages>,
-    current_page: ReadSignal<Pages>,
 ) -> impl IntoView {
+    // Create the references that will be used to hold input
     let title: NodeRef<Input> = create_node_ref();
     let author: NodeRef<Input> = create_node_ref();
     let genre: NodeRef<Input> = create_node_ref();
     let duration: NodeRef<Input> = create_node_ref();
 
     let on_submit = move |ev: SubmitEvent| {
+        // Make sure that the page doesn't refresh or redirect
         ev.prevent_default();
 
+        // Create a new song based on user input. None of the [NodeRef]s should error in here so
+        // long as there is an input element for it (no input would be "")
         let new_song = Song {
             title: title().expect("Error getting user input").value(),
             duration: duration()
@@ -45,13 +58,16 @@ pub fn AddSongPage(
             },
         };
 
+        // Add the new song
         set_playlist.update(|p| p.add_song(new_song));
 
+        // Return to Main Menu
         set_page.set(Pages::MainMenu);
     };
 
     view! {
         <form on:submit=on_submit class="hackerfont w-full flex flex-col justify-center items-center">
+          // # Title & Author
           <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label class="block uppercase tracking-wide text-gray-300 text-lg font-bold mb-2">
@@ -76,6 +92,8 @@ pub fn AddSongPage(
               /> <br/>
             </div>
           </div>
+
+          // # Duration
           <div class="mb-6">
             <label class="block uppercase tracking-wide text-gray-300 text-lg font-bold mb-2">
               Duration
@@ -89,6 +107,7 @@ pub fn AddSongPage(
             /> <br/>
           </div>
 
+          // # Genre
           <div class="mb-12">
             <label class="block uppercase tracking-wide text-gray-300 text-lg font-bold mb-2">
               Genere
@@ -121,6 +140,7 @@ pub fn AddSongPage(
             </div>
           </div>
 
+          // # Submit button
           <input
             class="block uppercase tracking-wide text-gray-300 text-xl font-bold mb-12 cursor-pointer"
             type="submit"
@@ -128,6 +148,6 @@ pub fn AddSongPage(
         </form>
 
 
-        <ReturnToMainMenu set_page=set_page current_page=current_page/>
+        <ReturnToMainMenu set_page=set_page/>
     }
 }

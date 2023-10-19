@@ -2,7 +2,7 @@ use crate::{body::Pages, utils::TypedText};
 use leptos::*;
 
 #[component]
-/// Header
+/// A simple header with [typed text](crate::utils::TypedText).
 pub fn Header() -> impl IntoView {
     logging::log!("Creating header.");
 

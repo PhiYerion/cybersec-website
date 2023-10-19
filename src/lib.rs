@@ -10,8 +10,13 @@
 
 pub mod album;
 pub mod body;
-pub mod header;
-pub mod main_menu;
+mod header;
+pub use header::Header;
+
+mod main_menu;
+pub use main_menu::MainMenuPage;
+pub use main_menu::ReturnToMainMenu;
+
 pub mod section;
 pub mod song;
 pub mod utils;

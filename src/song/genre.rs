@@ -1,4 +1,6 @@
 #[derive(Clone, Copy, Debug)]
+
+/// A basic enumeration of all possible Genres in our website
 pub enum Genre {
     Pop,
     Rock,
@@ -7,6 +9,7 @@ pub enum Genre {
 }
 
 impl Genre {
+    /// Convert the Genre to string representation
     pub fn to_string(self: &Self) -> String {
         match self {
             Self::Pop => "Pop".into(),

@@ -1,5 +1,6 @@
 use crate::song::Genre;
 
+/// A simple song struct.
 #[derive(Debug, Clone)]
 pub struct Song {
     pub title: String,

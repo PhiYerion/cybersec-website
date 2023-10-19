@@ -1,2 +1,12 @@
-#[mimes]
-#".woff2" = "font/woff2"
+[build]
+target = "index.html"
+# Build in release mode.
+release = true
+# The output dir for all final assets.
+dist = "dist"
+# The public URL from which assets are to be served.
+public_url = "/"
+# Whether to include hash values in the output file names.
+filehash = true
+# Whether to inject scripts (and module preloads) into the finalized output.
+inject_scripts = true

@@ -4,6 +4,7 @@ use crate::album::{AddSongPage, CreateAlbumPage, ViewAlbumListPage, ViewAlbumPag
 use crate::main_menu::MainMenuPage;
 use crate::utils::{create_test_playlists, TypedText};
 
+/// Enum defining all possible views/pages the body could be rendering.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Pages {
     MainMenu,
@@ -13,6 +14,16 @@ pub enum Pages {
     ViewAlbum,
 }
 
+/// Handles switching views/pages and manages state between views/pages.
+///
+/// # "Global State"
+/// The body instantiates and handles global state, but all read/write operations are done by
+/// pages/views that the body passes these values to.
+///
+/// ##### "Global" Variables
+/// * `(set_)cmd_text` - reactive signal for the command line at the top of the body
+/// * `(set_)page` - reactive signal for which page is currently active
+/// * `(set_)reactive_playlists` - the master list of all playlists
 #[component]
 pub fn Body() -> impl IntoView {
     const CMD_INTERVAL: u64 = 80;
@@ -24,29 +35,31 @@ pub fn Body() -> impl IntoView {
     let (page, set_page) = create_signal(Pages::MainMenu);
 
     // # Set up our 'global' playlists
-    // ## Here are our base playlist list with some example playlists
+    // Here are our base playlist list with some example playlists
     let playlists_base = create_test_playlists();
 
-    // ## Now we are converting this into a list of reactive playlists
+    // Now we are converting this into a list of reactive playlists
     let playlists: Vec<_> = playlists_base
         .into_iter() // <= transform into iterator
         .map(|p| create_signal(p)) // <=   for each elemennt, create a reactive signal
         .collect(); // <=     collect all into a vector
 
     // # Set up our playlist buffer
-    // ## Here is our playlist buffer, which holds one playlist reference. This is
-    // ## going to be used to find the selected playlist for now, but can be extended
-    // ## for different things.
-    // ## Note: this comes before reactive_playlists because it is better for us to
-    // ## clone and reactive_playlists to consume.
+    // Here is our playlist buffer, which holds one playlist reference. This is
+    // going to be used to find the selected playlist for now, but can be extended
+    // for different things.
+    // Note: this comes before reactive_playlists because it is better for us to
+    // clone and reactive_playlists to consume.
     let (playlist_buff, set_playlist_buff) = create_signal(playlists[0].clone());
 
-    // ## Now we convert the list of reactive playlists into a reactive list of
-    // ## reactive playlists.
+    // # Final playlists
+    // Now we convert the list of reactive playlists into a reactive list of
+    // reactive playlists that we will use in our application.
     let (reactive_playlists, set_reactive_playlists) = create_signal(playlists);
 
     view! {
       <div class="hackerfont text-gray-300">
+        // # Command line
         <p class="hackerfont text-lg text-white">
           <span class="text-red-500">
             "[root@csci.etsu.edu /usr/src/linux-6.5.6-gentoo]# "
@@ -59,14 +72,15 @@ pub fn Body() -> impl IntoView {
                       interval={CMD_INTERVAL}
                       stop=true
                       text={cmd.to_string()}
-                      current_page=page
                    />
               }
             })}}
           </span>
         </p>
+        // # Page/view handling
         {move || {
-            page.with(|p| { logging::log!("finding match statement"); match p {
+            // On change to page, run this match statement
+            page.with(|p| {match p {
                 Pages::MainMenu => {
                     set_cmd_text("msbuild ./linux.sln");
                     logging::log!("Building MainMenu");
@@ -74,39 +88,37 @@ pub fn Body() -> impl IntoView {
                         <MainMenuPage
                             delay=cmd_text().len() as u64 * CMD_INTERVAL + 20
                             set_page=set_page
-                            current_page=page
                         />
 
                     }
                 }
                 Pages::ViewAlbumList => {
                     set_cmd_text("msbuild ./ViewAlbums.sln");
-                    logging::log!("Building ViewAlbums");
+                    logging::log!("Building ViewAlbumList");
                     view! {
                         <ViewAlbumListPage
                             playlists=reactive_playlists()
-                            delay=cmd_text().len() as u64 * CMD_INTERVAL + 20
                             set_page=set_page
                             set_playlist_buff=set_playlist_buff
-                            current_page=page
                         />
                     }
                 }
                 Pages::ViewAlbum => {
-                    set_cmd_text("ms bufjdik alsjkfl ild ./linux.sln");
+                    set_cmd_text("nmap -p445 --script smb-vuln-ms17-010 127.0.0.1");
+                    logging::log!("Building ViewAlbums");
                     view! {
                         <ViewAlbumPage
-                            playlist=playlist_buff()
+                            playlist=playlist_buff().0
+                            set_playlist=playlist_buff().1
                             set_page=set_page
-                            current_page=page
                         />
                     }
                 }
                 Pages::AddAlbum => {
                     set_cmd_text("cat | /bin/powershell -c './create_album'");
+                    logging::log!("Bulding AddAlbum");
                     view! {
                         <CreateAlbumPage
-                            current_page=page
                             set_page=set_page
                             set_playlists=set_reactive_playlists
                         />
@@ -114,10 +126,10 @@ pub fn Body() -> impl IntoView {
                 }
                 Pages::CreateSong => {
                     set_cmd_text("cat | ./albums.txt");
+                    logging::log!("Bulding CreateSong");
                     view! {
                         <AddSongPage
                             set_page=set_page
-                            current_page=page
                             set_playlist=playlist_buff().1
                         />
                     }
